@@ -2,12 +2,15 @@ import * as jwt from 'jsonwebtoken';
 
 export default (req, res, next) => {
     const authHeader = req.get('Authorization');
+    req.isAuth = true;
+
     if (!authHeader) {
         req.isAuth = false;
 
         return next();
     }
     const token = authHeader.split(' ')[1];
+
     if (!token || token === '') {
         req.isAuth = false;
 
@@ -17,17 +20,9 @@ export default (req, res, next) => {
     try {
         decodedToken = jwt.verify(token, 'somesupersecretkey');
     } catch (err) {
-        req.isAuth = false;
-
-        return next();
+        return res.sendStatus(401);
     }
 
-    if (!decodedToken) {
-        req.isAuth = false;
-
-        return next();
-    }
-    req.isAuth = true;
     req.userId = decodedToken.userId;
     next();
 };

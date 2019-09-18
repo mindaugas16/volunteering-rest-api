@@ -13,8 +13,8 @@ const app = express();
 dotenv.config();
 
 app.use(bodyParser.json());
-app.use(cors);
 app.use(isAuth);
+app.use(cors);
 
 app.use('/api/v1', routes);
 

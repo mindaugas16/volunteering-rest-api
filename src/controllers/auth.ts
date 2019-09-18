@@ -16,7 +16,7 @@ export default {
         const {email, password} = req.body;
 
         if (req.isAuth) {
-            throw new Error('You\'re already logged in!');
+            return res.sendStatus(400);
         }
 
         if (!isEmail(email)) {
