@@ -1,6 +1,6 @@
 import { Document, model, Schema } from 'mongoose';
-import { EventInterface } from 'models/event';
-import { ParticipationInterface } from 'models/participation';
+import { EventInterface } from './events';
+import { ParticipationInterface } from './participations';
 
 export interface ActivityInterface extends Document {
     name: string;
@@ -43,6 +43,6 @@ const activitySchema = new Schema({
             ref: 'Participation'
         }
     ]
-}, {timestamps: true});
+}, { timestamps: true });
 
 export default model<ActivityInterface>('Activity', activitySchema);

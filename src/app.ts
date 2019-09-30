@@ -1,28 +1,38 @@
-import http from 'http';
-import express from 'express';
-import bodyParser = require("body-parser");
-import mongoose from "mongoose";
 import dotenv from 'dotenv';
-
+import express from 'express';
+import http from 'http';
+import mongoose from 'mongoose';
+import AuthMiddleware from './middleware/auth';
+import cors from './middleware/cors';
+import errorHandler from './middleware/error-handler';
 import routes from './routes';
-import cors from "./middleware/cors";
-import isAuth from "./middleware/is-auth";
+import bodyParser = require('body-parser');
 
 const app = express();
 
 dotenv.config();
 
 app.use(bodyParser.json());
-app.use(isAuth);
+
+// @TODO: fix is auth middleware
+app.use(AuthMiddleware.setAuth);
 app.use(cors);
+
+require('./models/activities');
+require('./models/users/users');
+require('./models/users/volunteers');
+require('./models/events');
+require('./models/participations');
 
 app.use('/api/v1', routes);
 
-mongoose.connect(
-    // tslint:disable-next-line:max-line-length
-    `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@cluster0-eoch3.mongodb.net/${process.env.MONGO_DB}?retryWrites=true`,
-    {useNewUrlParser: true, useUnifiedTopology: true}
-)
+app.use(errorHandler);
+
+mongoose
+    .connect(
+        `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@cluster0-eoch3.mongodb.net/${process.env.MONGO_DB}?retryWrites=true`,
+        { useNewUrlParser: true, useUnifiedTopology: true }
+    )
     .then(() => {
         const server = http.createServer(app);
 

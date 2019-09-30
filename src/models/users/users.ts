@@ -11,8 +11,8 @@ export interface UserInterface extends Document {
     postalCode: string;
     passwordResetAt: string;
 
-    resetToken: string;
-    resetTokenExpiresAt: number;
+    resetToken: string | undefined;
+    resetTokenExpiresAt: number | undefined;
 }
 
 const userSchema = new Schema({

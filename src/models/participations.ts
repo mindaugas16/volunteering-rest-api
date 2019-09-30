@@ -1,6 +1,6 @@
-import { Schema, model, Document } from 'mongoose';
-import { VolunteerInterface } from 'models/users/volunteer';
-import { ActivityInterface } from 'models/activity';
+import { Document, model, Schema } from 'mongoose';
+import { ActivityInterface } from 'src/models/activities';
+import { VolunteerInterface } from 'src/models/users/volunteers';
 
 export interface ParticipationInterface extends Document {
     volunteer: VolunteerInterface;
