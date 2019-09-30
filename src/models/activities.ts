@@ -1,6 +1,6 @@
 import { Document, model, Schema } from 'mongoose';
-import { EventInterface } from 'models/event';
-import { ParticipationInterface } from 'models/participation';
+import { EventInterface } from './event';
+import { ParticipationInterface } from './participation';
 
 export interface ActivityInterface extends Document {
     name: string;

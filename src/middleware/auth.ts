@@ -20,7 +20,11 @@ export default (req, res, next) => {
     try {
         decodedToken = jwt.verify(token, 'somesupersecretkey');
     } catch (err) {
-        return res.sendStatus(401);
+        // @TODO: fix token expiration issue
+        // return res.sendStatus(401).json(err);
+
+        req.isAuth = false;
+        return next();
     }
 
     req.userId = decodedToken.userId;
