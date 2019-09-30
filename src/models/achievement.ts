@@ -1,4 +1,4 @@
-import { model, Schema, Document } from 'mongoose';
+import { Document, model, Schema } from 'mongoose';
 
 export interface AchievementInterface extends Document {
     _id: string;
@@ -22,6 +22,6 @@ const achievementSchema = new Schema({
         type: Number,
         default: 0
     }
-}, {timestamps: true});
+}, { timestamps: true });
 
 export default model<AchievementInterface>('Achievement', achievementSchema);

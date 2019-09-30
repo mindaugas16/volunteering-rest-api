@@ -1,8 +1,8 @@
 import { Schema } from 'mongoose';
-import User, { UserInterface } from './user';
-import { OrganizationInterface } from './organization';
 import { AchievementInterface } from '../achievement';
 import { ParticipationInterface } from '../participations';
+import { OrganizationInterface } from './organizations';
+import User, { UserInterface } from './users';
 
 export interface VolunteerInterface extends UserInterface {
     organizations: OrganizationInterface[];

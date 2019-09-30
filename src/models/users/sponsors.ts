@@ -1,5 +1,5 @@
 import { Schema } from 'mongoose';
-import User, { UserInterface } from './user';
+import User, { UserInterface } from './users';
 
 export interface SponsorInterface extends UserInterface {
     _id: string;

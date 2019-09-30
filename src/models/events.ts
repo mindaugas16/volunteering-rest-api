@@ -1,6 +1,6 @@
 import { Document, model, Schema } from 'mongoose';
-import { OrganizationInterface } from './users/organization';
-import { ActivityInterface } from './activity';
+import { ActivityInterface } from './activities';
+import { OrganizationInterface } from './users/organizations';
 
 export interface EventInterface extends Document {
     title: string;
@@ -57,6 +57,6 @@ const eventSchema = new Schema({
     imagePath: {
         type: String
     }
-}, {timestamps: true});
+}, { timestamps: true });
 
 export default model<EventInterface>('Event', eventSchema);
