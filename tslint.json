@@ -17,9 +17,10 @@
     "no-console": false,
     "no-require-imports": false,
     "strict-boolean-expressions": false,
-    "switch-default":false,
+    "switch-default": false,
     "typedef": false,
-    "no-unbound-method":false
+    "no-unbound-method": false,
+    "await-promise": false
   },
   "rulesDirectory": []
 }

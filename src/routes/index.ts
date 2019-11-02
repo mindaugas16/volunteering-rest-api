@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import cache from '../middleware/cache';
+// import cache from '../middleware/cache';
 import ActivitiesRouter from './activities';
 import AuthRouter from './auth';
 import EventsRouter from './events';
@@ -12,7 +12,7 @@ const router = Router();
 router.use('/auth', AuthRouter);
 router.use('/users', UsersRouter);
 router.use('/activities', ActivitiesRouter);
-router.use('/events', cache, EventsRouter);
+router.use('/events', EventsRouter);
 router.use('/tags', TagsRouter);
 router.use('/organizations', OrganizationsRouter);
 
