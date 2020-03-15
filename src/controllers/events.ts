@@ -1,6 +1,9 @@
+import { clearImage } from 'src/helpers/file';
 import { SHOW_PER_PAGE } from '../constants/pagination.constants';
 import Events from '../models/events';
 import Organizations from '../models/users/organizations';
+import { FormError } from './../helpers/error';
+import { EventStatus } from './../models/events';
 
 const showPerPage = SHOW_PER_PAGE;
 
@@ -92,7 +95,7 @@ export default {
       .catch(err => res.status(500).json(err));
   },
   createEvent(req, res, next) {
-    const { title } = req.body;
+    const { title, status, date } = req.body;
     let currentOrganization;
 
     Organizations.findById(req.userId)
@@ -108,27 +111,36 @@ export default {
         return Events.findOne({ title });
       })
       .then(event => {
+        const errors: FormError[] = [];
         if (event) {
-          const error = new Error('Event already created') as any;
-          error.statusCode = 400;
-
-          return next(error);
+          errors.push(new FormError('title', 'unique', 'Title should be unique'));
         }
 
-        return new Events(req.body).save();
+        if (status !== EventStatus.DRAFT && !(date && date.start)) {
+          errors.push(
+            new FormError('startDate', 'required', 'Public event must have event date set')
+          );
+        }
+
+        if (errors.length) {
+          const error = new Error('Invalid input') as any;
+          error.data = errors;
+          error.statusCode = 400;
+          throw error;
+        }
+
+        return new Events({ ...req.body, organization: currentOrganization._id }).save();
       })
       .then(event => {
         currentOrganization.events.push(event._id);
         currentOrganization.save();
         res.send(event);
       })
-      .catch(err => {
-        throw err;
-      });
+      .catch(err => next(err));
   },
   updatedEvent(req, res, next) {
     const { eventId } = req.params;
-    const { title, description, date, location, status, customFields } = req.body;
+    const { title, description, date, location, status, customFields, imagePath } = req.body;
 
     Events.findById(eventId)
       .then(event => {
@@ -139,12 +151,31 @@ export default {
           return next(error);
         }
 
+        const errors: FormError[] = [];
+
+        if (status !== EventStatus.DRAFT && !(date && date.start)) {
+          errors.push(
+            new FormError('startDate', 'required', 'Public event must have event date set')
+          );
+        }
+
+        if (errors.length) {
+          const error = new Error('Invalid input') as any;
+          error.data = errors;
+          error.statusCode = 400;
+          throw error;
+        }
+
         event.title = title;
         event.description = description;
         event.date = date;
         event.location = location;
         event.status = status;
         event.customFields = customFields;
+        if (!imagePath && event.imagePath) {
+          clearImage(event.imagePath);
+        }
+        event.imagePath = imagePath;
 
         return event.save();
       })
@@ -152,7 +183,7 @@ export default {
         res.send(event);
       })
       .catch(err => {
-        throw err;
+        next(err);
       });
   }
 };

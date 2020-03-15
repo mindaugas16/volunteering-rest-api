@@ -101,7 +101,7 @@ export default {
 
         return bcrypt.hash(password, 12);
       })
-      .then(async hashedPassword => {
+      .then(hashedPassword => {
         const { password, ...rest } = req.body;
 
         return new type({

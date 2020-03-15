@@ -16,6 +16,12 @@ export interface EventInterface extends Document {
   customFields: CustomFieldInterface[];
 }
 
+export enum EventStatus {
+  DRAFT,
+  PUBLIC,
+  PRIVATE
+}
+
 const eventSchema = new Schema(
   {
     status: {
@@ -38,7 +44,8 @@ const eventSchema = new Schema(
     },
     organization: {
       type: Schema.Types.ObjectId,
-      ref: 'Organization'
+      ref: 'Organization',
+      required: true
     },
     activities: [
       {
